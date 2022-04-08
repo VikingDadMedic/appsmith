@@ -743,6 +743,17 @@ export const CHANGES_USER_AND_MIGRATION = () =>
   "Appsmith update and user changes since last commit";
 // GIT DEPLOY end
 
+// GIT DELETE BRANCH begin
+export const LOCAL_BRANCHES = () => "Local branches";
+export const REMOTE_BRANCHES = () => "Remote branches";
+
+// warnings
+export const DELETE_BRANCH_WARNING_CHECKED_OUT = (currentBranchName: string) =>
+  `Cannot delete checked out branch. Please check out other branch before deleting ${currentBranchName}.`;
+export const DELETE_BRANCH_WARNING_DEFAULT = (defaultBranchName: string) =>
+  `Cannot delete default branch: ${defaultBranchName}`;
+// GIT DELETE BRANCH end
+
 // GIT ERRORS begin
 export const ERROR_GIT_AUTH_FAIL = () =>
   "Please make sure that regenerated SSH key is added and has write access to the repo.";

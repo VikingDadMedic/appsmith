@@ -2,6 +2,7 @@ import SegmentHeader from "components/ads/ListSegmentHeader";
 import { BranchListItem } from "./BranchListItem";
 import { getIsActiveItem } from "../utils";
 import React from "react";
+import { createMessage, LOCAL_BRANCHES } from "@appsmith/constants/messages";
 
 /**
  * LocalBranchList: returns a list of local branches
@@ -23,28 +24,29 @@ export function LocalBranchList(
   return (
     <div data-testid="t--git-local-branch-list-container">
       {localBranches?.length > 0 && (
-        <SegmentHeader hideStyledHr title={"Local branches"} />
+        <SegmentHeader hideStyledHr title={createMessage(LOCAL_BRANCHES)} />
       )}
-      {localBranches.map((branch: string, index: number) => (
-        <BranchListItem
-          active={currentBranch === branch}
-          branch={branch}
-          className="t--branch-item"
-          hovered={getIsActiveItem(
+      {localBranches
+        .map((branch: string, index: number) => ({
+          branch,
+          isActive: getIsActiveItem(
             isCreateNewBranchInputValid,
             activeHoverIndex,
             index,
-          )}
-          isDefault={branch === defaultBranch}
-          key={branch}
-          onClick={() => switchBranch(branch)}
-          shouldScrollIntoView={getIsActiveItem(
-            isCreateNewBranchInputValid,
-            activeHoverIndex,
-            index,
-          )}
-        />
-      ))}
+          ),
+        }))
+        .map(({ branch, isActive }) => (
+          <BranchListItem
+            active={currentBranch === branch}
+            branch={branch}
+            className="t--branch-item"
+            hovered={isActive}
+            isDefault={branch === defaultBranch}
+            key={branch}
+            onClick={() => switchBranch(branch)}
+            shouldScrollIntoView={isActive}
+          />
+        ))}
     </div>
   );
 }

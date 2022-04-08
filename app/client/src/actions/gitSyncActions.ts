@@ -1,10 +1,10 @@
-import { ReduxActionTypes } from "constants/ReduxActionConstants";
-import { ConnectToGitPayload } from "api/GitSyncAPI";
 import {
-  ReduxActionWithCallbacks,
   ReduxActionErrorTypes,
+  ReduxActionTypes,
+  ReduxActionWithCallbacks,
 } from "constants/ReduxActionConstants";
-import { GitSyncModalTab, GitConfig, MergeStatus } from "entities/GitSync";
+import { ConnectToGitPayload } from "api/GitSyncAPI";
+import { GitConfig, GitSyncModalTab, MergeStatus } from "entities/GitSync";
 import { GitApplicationMetadata } from "api/ApplicationApi";
 import { GitStatusData } from "reducers/uiReducers/gitSyncReducer";
 import { ResponseMeta } from "../api/ApiResponses";
@@ -383,6 +383,11 @@ export const deleteBranchSuccess = (payload: any) => ({
 
 export const deleteBranchError = (payload: any) => ({
   type: ReduxActionErrorTypes.DELETE_BRANCH_ERROR,
+  payload,
+});
+
+export const deleteBranchWarning = (payload: any) => ({
+  type: ReduxActionErrorTypes.DELETE_BRANCH_WARNING,
   payload,
 });
 

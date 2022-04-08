@@ -4,7 +4,7 @@ import {
   ReduxActionErrorTypes,
   ReduxActionTypes,
 } from "constants/ReduxActionConstants";
-import { GitSyncModalTab, GitConfig, MergeStatus } from "entities/GitSync";
+import { GitConfig, GitSyncModalTab, MergeStatus } from "entities/GitSync";
 import { GetSSHKeyResponseData } from "actions/gitSyncActions";
 
 const initialState: GitSyncReducerState = {
@@ -51,8 +51,8 @@ const gitSyncReducer = createReducer(initialState, {
       connectError: null,
       commitAndPushError: null,
       pullError: null,
-      mergeError: null, // reset conflicts when the modal is opened
-      pullFailed: false,
+      mergeError: null,
+      pullFailed: false, // reset conflicts when the modal is opened
       gitImportError: null,
     };
   },
@@ -452,6 +452,13 @@ const gitSyncReducer = createReducer(initialState, {
     ...state,
     deleteBranchError: action.payload,
   }),
+  [ReduxActionErrorTypes.DELETE_BRANCH_WARNING]: (
+    state: GitSyncReducerState,
+    action: ReduxAction<any>,
+  ) => ({
+    ...state,
+    deleteBranchWarning: action.payload,
+  }),
   [ReduxActionTypes.DELETING_BRANCH]: (
     state: GitSyncReducerState,
     action: ReduxAction<any>,
@@ -490,6 +497,7 @@ export type GitErrorType = {
 export type GitBranchDeleteState = {
   deleteBranch?: any;
   deleteBranchError?: any;
+  deleteBranchWarning?: any;
   deletingBranch?: boolean;
 };
 

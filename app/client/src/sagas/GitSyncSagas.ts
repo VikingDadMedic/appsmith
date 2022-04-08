@@ -20,6 +20,7 @@ import {
   commitToRepoSuccess,
   deleteBranchError,
   deleteBranchSuccess,
+  deleteBranchWarning,
   deletingBranch,
   fetchBranchesInit,
   fetchBranchesSuccess,
@@ -64,6 +65,8 @@ import {
 } from "selectors/applicationSelectors";
 import {
   createMessage,
+  DELETE_BRANCH_WARNING_CHECKED_OUT,
+  DELETE_BRANCH_WARNING_DEFAULT,
   ERROR_GIT_AUTH_FAIL,
   ERROR_GIT_INVALID_REMOTE,
   GIT_USER_UPDATED_SUCCESSFULLY,
@@ -786,7 +789,7 @@ export function* generateSSHKeyPairSaga(action: GenerateSSHKeyPairReduxAction) {
   }
 }
 
-export function* deleteBranch() {
+export function* deleteBranch(branchToDelete: string) {
   let response: ApiResponse | undefined;
   try {
     yield put(deletingBranch(true));
@@ -794,10 +797,25 @@ export function* deleteBranch() {
     const gitMetaData: GitApplicationMetadata = yield select(
       getCurrentAppGitMetaData,
     );
-    response = yield GitSyncAPI.deleteBranch(
-      applicationId,
-      gitMetaData?.branchName || "",
-    );
+    const currentBranch = gitMetaData?.branchName || "";
+    const defaultBranchName = gitMetaData?.defaultBranchName || "master";
+    if (currentBranch === defaultBranchName) {
+      return yield put(
+        deleteBranchWarning({
+          message: createMessage(DELETE_BRANCH_WARNING_DEFAULT),
+          subtype: "DELETE_BRANCH_WARNING",
+        }),
+      );
+    }
+    if (currentBranch === branchToDelete) {
+      return yield put(
+        deleteBranchWarning({
+          message: createMessage(DELETE_BRANCH_WARNING_CHECKED_OUT),
+          subtype: "DELETE_BRANCH_WARNING",
+        }),
+      );
+    }
+    response = yield GitSyncAPI.deleteBranch(applicationId, branchToDelete);
     const isValidResponse: boolean = yield validateResponse(
       response,
       false,

@@ -700,6 +700,7 @@ export const ReduxActionTypes = {
 export type ReduxActionType = typeof ReduxActionTypes[keyof typeof ReduxActionTypes];
 
 export const ReduxActionErrorTypes = {
+  DELETE_BRANCH_WARNING: "DELETE_BRANCH_WARNING",
   DELETE_BRANCH_ERROR: "DELETE_BRANCH_ERROR",
   GIT_PULL_ERROR: "GIT_PULL_ERROR",
   FETCH_MERGE_STATUS_ERROR: "FETCH_MERGE_STATUS_ERROR",
